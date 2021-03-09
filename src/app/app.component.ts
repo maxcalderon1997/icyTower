@@ -46,8 +46,14 @@ class component {
   
   newPos() {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
+        if(this.speedX > 5){
+          this.speedX = 5;
+        }
         this.speedX -= 0.2; 
       } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
+        if(this.speedX < -5){
+          this.speedX = -5;
+        }
         this.speedX += 0.2; 
       } else {
         if (this.speedX > 0) {
@@ -62,14 +68,10 @@ class component {
       this.speedY += this.gravity;
       this.y += this.speedY;
       this.hitBottom();
-      for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-        if (this.crashWith(AppComponent.myObstacles[i])) {
-          this.y = AppComponent.myObstacles[i].y - this.height;
-          this.speedY = 1;
-          this.gravity = 0;
-          // clearInterval(AppComponent.myGameArea.interval);
-        } 
-    }
+      
+      if (!this.didCrash()) {
+        this.gravity = 0.98;
+      }
   }
   
   hitBottom() {
@@ -87,6 +89,19 @@ class component {
         this.speedX = -this.speedX/2;
     }
   }
+
+  didCrash() {
+    let didCrash: boolean = false;
+    for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
+      if (this.crashWith(AppComponent.myObstacles[i])) {
+        this.y = AppComponent.myObstacles[i].y - this.height;
+        this.speedY = 1;
+        this.gravity = 0;
+        didCrash = true;
+      } 
+    }
+    return didCrash;
+  }
   
   crashWith(otherobj) {
       var myleft = this.x;
@@ -98,7 +113,7 @@ class component {
       var othertop = otherobj.y;
       var otherbottom = otherobj.y + (otherobj.height);
       var crash = false;
-      if (this.speedY > 0 && (mybottom <= othertop) && (mybottom >= othertop - 15) && (myright >= otherleft) && (myleft <= otherright)) {
+      if (this.speedY > 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
           crash = true;
       }
       return crash;
@@ -119,10 +134,10 @@ export class AppComponent {
       keys: [],
       canvas : document.createElement("canvas"),
       start : function(updateGameArea) {
-          this.canvas.width = 1000;
+          this.canvas.width = 800;
           this.canvas.height = 550;
           this.canvas.style.border = "1px solid black";
-          this.canvas.style.marginLeft = "100px";
+          this.canvas.style.marginLeft = "200px";
           this.context = this.canvas.getContext("2d");
           document.body.insertBefore(this.canvas, document.body.childNodes[0]);
           this.frameNo = 0;
@@ -160,9 +175,12 @@ export class AppComponent {
       if (AppComponent.myGameArea.frameNo == 1 || this.everyinterval(150)) {
           y = AppComponent.myGameArea.canvas.height;
           minWidth = 100;
-          maxWidth = 200;
+          maxWidth = 300;
           width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
           x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
+          if(AppComponent.myObstacles.length > 5){
+            AppComponent.myObstacles.shift();
+          }
           AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea));
       }
       for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
@@ -172,8 +190,9 @@ export class AppComponent {
       this.myScore.text="SCORE: " + AppComponent.myGameArea.frameNo;
       this.myScore.update();
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
-        this.myGamePiece.y == AppComponent.myGameArea.canvas.height - this.myGamePiece.height) {
-        this.accelerate(-30);
+        (this.myGamePiece.y == AppComponent.myGameArea.canvas.height - this.myGamePiece.height ||
+          this.myGamePiece.didCrash())) {
+        this.accelerate(-20);
       }
       this.myGamePiece.newPos();
       this.myGamePiece.update();
