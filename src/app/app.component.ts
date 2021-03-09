@@ -11,7 +11,6 @@ class component {
   x;
   y;
   gravity = 0;
-  gravitySpeed = 0;
   color;
   myGameArea;
   text = "";
@@ -46,8 +45,6 @@ class component {
   }
   
   newPos() {
-      // this. = 0;
-      // this.speedY = 0;
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
         this.speedX -= 0.2; 
       } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
@@ -61,24 +58,22 @@ class component {
         }
       }
       this.speedX = parseFloat(this.speedX.toFixed(2));
-      this.gravitySpeed += this.gravity;
       this.x += this.speedX;
-      if (this.speedY != 0) {
-        console.log('y ' + this.y);
-      }
-      this.y += this.speedY + this.gravitySpeed;
-      if (this.speedY != 0) {
-        console.log('speed ' + this.speedY);
-        console.log('y ' + this.y);
-      }
+      this.speedY += this.gravity;
+      this.y += this.speedY;
       this.hitBottom();
+      for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
+        if (this.crashWith(AppComponent.myObstacles[i])) {
+          this.y = AppComponent.myObstacles[i].y - this.height;
+          clearInterval(AppComponent.myGameArea.interval);
+        } 
+    }
   }
   
   hitBottom() {
       var rockbottom = this.myGameArea.canvas.height - this.height;
       if (this.y > rockbottom) {
           this.y = rockbottom;
-          this.gravitySpeed = 0;
           this.speedY = 0;
       }
       if (this.x < 0) {
@@ -100,9 +95,9 @@ class component {
       var otherright = otherobj.x + (otherobj.width);
       var othertop = otherobj.y;
       var otherbottom = otherobj.y + (otherobj.height);
-      var crash = true;
-      if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-          crash = false;
+      var crash = false;
+      if (this.speedY > 0 && (mybottom <= othertop) && (mybottom >= othertop - 15) && (myright >= otherleft) && (myleft <= otherright)) {
+          crash = true;
       }
       return crash;
   }
@@ -116,7 +111,7 @@ class component {
 export class AppComponent {
   title = 'icyTower';
   myGamePiece;
-  myObstacles = [];
+  static myObstacles = [];
   myScore;
   static myGameArea = {
       keys: [],
@@ -157,32 +152,25 @@ export class AppComponent {
   }
 
   updateGameArea() {
-      var x, height, gap, minHeight, maxHeight, minGap, maxGap;
-      for (let i = 0; i < this.myObstacles.length; i += 1) {
-          if (this.myGamePiece.crashWith(this.myObstacles[i])) {
-              return;
-          } 
-      }
+      var x, y, width, minWidth, maxWidth;
       AppComponent.myGameArea.clear();
       AppComponent.myGameArea.frameNo += 1;
       if (AppComponent.myGameArea.frameNo == 1 || this.everyinterval(150)) {
-          // x = AppComponent.myGameArea.canvas.width;
-          // minHeight = 20;
-          // maxHeight = 200;
-          // height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
-          // minGap = 50;
-          // maxGap = 200;
-          // gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
-          // this.myObstacles.push(new component(10, height, "green", x, 0, "", AppComponent.myGameArea));
-          // this.myObstacles.push(new component(10, x - height - gap, "green", x, height + gap,  "", AppComponent.myGameArea));
+          y = AppComponent.myGameArea.canvas.height;
+          minWidth = 100;
+          maxWidth = 200;
+          width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
+          x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
+          AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea));
       }
-      for (let i = 0; i < this.myObstacles.length; i += 1) {
-          this.myObstacles[i].x += -1;
-          this.myObstacles[i].update();
+      for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
+        AppComponent.myObstacles[i].y += 1;
+        AppComponent.myObstacles[i].update();
       }
-      // this.myScore.text="SCORE: " + AppComponent.myGameArea.frameNo;
-      // this.myScore.update();
-      if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32]) {
+      this.myScore.text="SCORE: " + AppComponent.myGameArea.frameNo;
+      this.myScore.update();
+      if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
+        this.myGamePiece.y == AppComponent.myGameArea.canvas.height - this.myGamePiece.height) {
         this.accelerate(-30);
       }
       this.myGamePiece.newPos();
