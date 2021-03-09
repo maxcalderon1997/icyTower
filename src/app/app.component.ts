@@ -65,7 +65,9 @@ class component {
       for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
         if (this.crashWith(AppComponent.myObstacles[i])) {
           this.y = AppComponent.myObstacles[i].y - this.height;
-          clearInterval(AppComponent.myGameArea.interval);
+          this.speedY = 1;
+          this.gravity = 0;
+          // clearInterval(AppComponent.myGameArea.interval);
         } 
     }
   }
