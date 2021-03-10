@@ -15,7 +15,7 @@ class component {
   myGameArea;
   text = "";
 
-  constructor(width, height, color, x, y, type, myGameArea){
+  constructor(width, height, color, x, y, type, myGameArea, score?){
     this.type = type;
     this.width = width;
     this.height = height;
@@ -23,6 +23,9 @@ class component {
     this.y = y;
     this.color = color;
     this.myGameArea = myGameArea;
+    if (score) {
+      this.score = score;
+    }
   }
 
   set speedY(value: any) {
@@ -106,15 +109,14 @@ class component {
   crashWith(otherobj) {
       var myleft = this.x;
       var myright = this.x + (this.width);
-      var mytop = this.y;
       var mybottom = this.y + (this.height);
       var otherleft = otherobj.x;
       var otherright = otherobj.x + (otherobj.width);
       var othertop = otherobj.y;
-      var otherbottom = otherobj.y + (otherobj.height);
       var crash = false;
       if (this.speedY > 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
           crash = true;
+          AppComponent.myScore.text="SCORE: " + otherobj.score;
       }
       return crash;
   }
@@ -129,7 +131,7 @@ export class AppComponent {
   title = 'icyTower';
   myGamePiece;
   static myObstacles = [];
-  myScore;
+  static myScore;
   static myGameArea = {
       keys: [],
       canvas : document.createElement("canvas"),
@@ -164,7 +166,7 @@ export class AppComponent {
   startGame() {
       this.myGamePiece = new component(30, 30, "red", 10, 120, "", AppComponent.myGameArea);
       this.myGamePiece.gravity = 0.98;
-      this.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
+      AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
       AppComponent.myGameArea.start(this.updateGameArea.bind(this));
   }
 
@@ -181,14 +183,14 @@ export class AppComponent {
           if(AppComponent.myObstacles.length > 5){
             AppComponent.myObstacles.shift();
           }
-          AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea));
+          AppComponent.myScore.score += 1;
+          AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea, AppComponent.myScore.score));
       }
       for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
         AppComponent.myObstacles[i].y += 1;
         AppComponent.myObstacles[i].update();
       }
-      this.myScore.text="SCORE: " + AppComponent.myGameArea.frameNo;
-      this.myScore.update();
+      AppComponent.myScore.update();
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
         (this.myGamePiece.y == AppComponent.myGameArea.canvas.height - this.myGamePiece.height ||
           this.myGamePiece.didCrash())) {
