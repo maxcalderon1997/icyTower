@@ -94,16 +94,15 @@ class component {
   }
 
   didCrash() {
-    let didCrash: boolean = false;
     for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
       if (this.crashWith(AppComponent.myObstacles[i])) {
         this.y = AppComponent.myObstacles[i].y - this.height;
-        this.speedY = 1;
+        this.speedY = 0;
         this.gravity = 0;
-        didCrash = true;
+        return true;
       } 
     }
-    return didCrash;
+    return false;
   }
   
   crashWith(otherobj) {
@@ -114,7 +113,7 @@ class component {
       var otherright = otherobj.x + (otherobj.width);
       var othertop = otherobj.y;
       var crash = false;
-      if (this.speedY > 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
+      if (this.speedY >= 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
           crash = true;
           AppComponent.myScore.text="SCORE: " + otherobj.score;
       }
@@ -168,26 +167,37 @@ export class AppComponent {
       this.myGamePiece.gravity = 0.98;
       AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
       AppComponent.myGameArea.start(this.updateGameArea.bind(this));
+      for (let i = 1; i <= 5; i++) {
+        let minWidth = 100, maxWidth = 300;
+        let width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
+        let x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
+        if(AppComponent.myObstacles.length > 5){
+          AppComponent.myObstacles.shift();
+        }
+        AppComponent.myScore.score += 1;
+        AppComponent.myObstacles.push(new component(width, 10, "green", x, i * AppComponent.myGameArea.canvas.height / 6, "", AppComponent.myGameArea, AppComponent.myScore.score));
+      }
   }
 
   updateGameArea() {
-      var x, y, width, minWidth, maxWidth;
+      var x, width, minWidth, maxWidth;
       AppComponent.myGameArea.clear();
       AppComponent.myGameArea.frameNo += 1;
-      if (AppComponent.myGameArea.frameNo == 1 || this.everyinterval(150)) {
-          y = AppComponent.myGameArea.canvas.height;
-          minWidth = 100;
-          maxWidth = 300;
-          width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
-          x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
-          if(AppComponent.myObstacles.length > 5){
-            AppComponent.myObstacles.shift();
-          }
-          AppComponent.myScore.score += 1;
-          AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea, AppComponent.myScore.score));
-      }
+      // if (AppComponent.myGameArea.frameNo == 1 || this.everyinterval(150)) {
+      //     minWidth = 100;
+      //     maxWidth = 300;
+      //     width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
+      //     x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
+      //     if(AppComponent.myObstacles.length > 5){
+      //       AppComponent.myObstacles.shift();
+      //     }
+      //     AppComponent.myScore.score += 1;
+      //     AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea, AppComponent.myScore.score));
+      // }
       for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-        AppComponent.myObstacles[i].y += 1;
+        if(this.myGamePiece.speedY < 0 && this.myGamePiece.y < AppComponent.myGameArea.canvas.height / 2) {
+          AppComponent.myObstacles[i].y -= this.myGamePiece.speedY;
+        }
         AppComponent.myObstacles[i].update();
       }
       AppComponent.myScore.update();
