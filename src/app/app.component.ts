@@ -50,27 +50,33 @@ class component {
   
   newPos() {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
-        if(this.speedX > environment.stopSpeed){
-          this.speedX = environment.stopSpeed;
+        if(this.speedX > environment.stopSpeedLimit){
+          this.speedX = environment.stopSpeedLimit;
         }
         this.speedX -= environment.accelerationX; 
       } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
-        if(this.speedX < -environment.stopSpeed){
-          this.speedX = -environment.stopSpeed;
+        if(this.speedX < -environment.stopSpeedLimit){
+          this.speedX = -environment.stopSpeedLimit;
         }
         this.speedX += environment.accelerationX; 
       } else {
         if (this.speedX > 0) {
-          if (this.speedX < 0.2) {
+          if(this.speedX > environment.stopSpeedLimit){
+            this.speedX = environment.stopSpeedLimit;
+          }
+          if (this.speedX < environment.stopAccelerationX) {
             this.speedX = 0;
           }
-          this.speedX -= 0.2;
+          this.speedX -= environment.stopAccelerationX;
         }
         else if (this.speedX < 0) {
-          if (this.speedX > -0.2) {
+          if(this.speedX < -environment.stopSpeedLimit){
+            this.speedX = -environment.stopSpeedLimit;
+          }
+          if (this.speedX > -environment.stopAccelerationX) {
             this.speedX = 0;
           }
-          this.speedX += 0.2;
+          this.speedX += environment.stopAccelerationX;
         }
       }
       this.speedX = parseFloat(this.speedX.toFixed(2));

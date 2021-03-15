@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  accelerationX: 0.3,
-  stopSpeed: 3,
-  gravity: 0.98
+  accelerationX: 0.4,
+  stopSpeedLimit: 4,
+  gravity: 0.98,
+  stopAccelerationX: 0.15
 };
 
 /*
