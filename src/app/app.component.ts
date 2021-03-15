@@ -128,7 +128,7 @@ class component {
 })
 export class AppComponent {
   title = 'icyTower';
-  myGamePiece;
+  static myGamePiece;
   static myObstacles = [];
   static myScore;
   static myGameArea = {
@@ -137,15 +137,18 @@ export class AppComponent {
       start : function(updateGameArea) {
           this.canvas.width = 800;
           this.canvas.height = 552;
+          AppComponent.myGamePiece.y = this.canvas.height - AppComponent.myGamePiece.height;
           this.canvas.style.border = "1px solid black";
           this.canvas.style.marginLeft = "200px";
           this.context = this.canvas.getContext("2d");
+          AppComponent.myGamePiece.update();
           document.body.insertBefore(this.canvas, document.body.childNodes[0]);
           this.frameNo = 0;
-          updateGameArea();
-          this.interval = setInterval(updateGameArea, 20);
           window.addEventListener('keydown', function (e) {
             AppComponent.myGameArea.keys[e.keyCode] = true;
+            if (!AppComponent.myGameArea.interval) {
+              AppComponent.myGameArea.interval = setInterval(updateGameArea, 20);
+            }
           });
           window.addEventListener('keyup', function (e) {
             AppComponent.myGameArea.keys[e.keyCode] = false;
@@ -163,13 +166,17 @@ export class AppComponent {
   }
 
   startGame() {
-      this.myGamePiece = new component(30, 30, "red", 10, 120, "", AppComponent.myGameArea);
-      this.myGamePiece.gravity = 0.98;
-      AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
-      AppComponent.myGameArea.start(this.updateGameArea.bind(this));
-      for (let i = 0; i < 4; i++) {
-        this.createObstacle((3-i) * ((AppComponent.myGameArea.canvas.height) / 4));
-      }
+    AppComponent.myGamePiece = new component(30, 30, "red", 10, AppComponent.myGameArea.canvas.height, "", AppComponent.myGameArea);
+    AppComponent.myGamePiece.gravity = 0.98;
+    AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
+    AppComponent.myGameArea.start(this.updateGameArea.bind(this));
+    for (let i = 0; i < 4; i++) {
+      this.createObstacle((3-i) * ((AppComponent.myGameArea.canvas.height) / 4));
+    }
+    AppComponent.myObstacles.forEach(obstacle => {
+      obstacle.update();
+    })
+    AppComponent.myGamePiece.update();
   }
 
   createObstacle(y) {
@@ -198,14 +205,14 @@ export class AppComponent {
         this.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
         AppComponent.myObstacles.shift();
       }
-      let prevSpeed = this.myGamePiece.speedY;
+      let prevSpeed = AppComponent.myGamePiece.speedY;
       let didReset: boolean = false;
-      if(this.myGamePiece.speedY < 0 && this.myGamePiece.y < AppComponent.myGameArea.canvas.height / 2) {
+      if(AppComponent.myGamePiece.speedY < 0 && AppComponent.myGamePiece.y < AppComponent.myGameArea.canvas.height / 2) {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-          AppComponent.myObstacles[i].y -= this.myGamePiece.speedY;
+          AppComponent.myObstacles[i].y -= AppComponent.myGamePiece.speedY;
           AppComponent.myObstacles[i].update();
         }
-        this.myGamePiece.speedY = 0;
+        AppComponent.myGamePiece.speedY = 0;
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
@@ -214,14 +221,14 @@ export class AppComponent {
       }
       AppComponent.myScore.update();
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
-        (this.myGamePiece.y == AppComponent.myGameArea.canvas.height - this.myGamePiece.height ||
-          this.myGamePiece.didCrash())) {
+        (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
+          AppComponent.myGamePiece.didCrash())) {
         this.accelerate(-20);
       }
-      this.myGamePiece.newPos();
-      this.myGamePiece.update();
+      AppComponent.myGamePiece.newPos();
+      AppComponent.myGamePiece.update();
       if (didReset) {
-        this.myGamePiece.speedY = prevSpeed + this.myGamePiece.gravity;
+        AppComponent.myGamePiece.speedY = prevSpeed + AppComponent.myGamePiece.gravity;
       }
   }
 
@@ -231,6 +238,6 @@ export class AppComponent {
   }
 
   accelerate(n) {
-      this.myGamePiece.speedY = n;
+    AppComponent.myGamePiece.speedY = n;
   }
 }
