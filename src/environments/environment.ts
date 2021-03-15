@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  accelerationX: 0.3,
+  stopSpeed: 3,
+  gravity: 0.98
 };
 
 /*

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 class component {
 
@@ -49,27 +50,27 @@ class component {
   
   newPos() {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
-        if(this.speedX > 4){
-          this.speedX = 4;
+        if(this.speedX > environment.stopSpeed){
+          this.speedX = environment.stopSpeed;
         }
-        this.speedX -= 0.4; 
+        this.speedX -= environment.accelerationX; 
       } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
-        if(this.speedX < -4){
-          this.speedX = -4;
+        if(this.speedX < -environment.stopSpeed){
+          this.speedX = -environment.stopSpeed;
         }
-        this.speedX += 0.4; 
+        this.speedX += environment.accelerationX; 
       } else {
         if (this.speedX > 0) {
-          if (this.speedX < 0.4) {
+          if (this.speedX < 0.2) {
             this.speedX = 0;
           }
-          this.speedX -= 0.4;
+          this.speedX -= 0.2;
         }
         else if (this.speedX < 0) {
-          if (this.speedX > -0.4) {
+          if (this.speedX > -0.2) {
             this.speedX = 0;
           }
-          this.speedX += 0.4;
+          this.speedX += 0.2;
         }
       }
       this.speedX = parseFloat(this.speedX.toFixed(2));
@@ -79,7 +80,7 @@ class component {
       this.hitBottom();
       
       if (!this.didCrash()) {
-        this.gravity = 0.98;
+        this.gravity = environment.gravity;
       }
   }
   
