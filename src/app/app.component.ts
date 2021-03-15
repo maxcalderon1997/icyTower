@@ -60,9 +60,15 @@ class component {
         this.speedX += 0.2; 
       } else {
         if (this.speedX > 0) {
+          if (this.speedX < 0.2) {
+            this.speedX = 0;
+          }
           this.speedX -= 0.2;
         }
-        if (this.speedX < 0) {
+        else if (this.speedX < 0) {
+          if (this.speedX > -0.2) {
+            this.speedX = 0;
+          }
           this.speedX += 0.2;
         }
       }
@@ -86,10 +92,12 @@ class component {
       if (this.x < 0) {
           this.x = 0;
           this.speedX = -this.speedX/2;
+          this.speedX = parseFloat(this.speedX.toFixed(2));
       }
       if (this.x + this.width > this.myGameArea.canvas.width) {
         this.x = this.myGameArea.canvas.width - this.width;
         this.speedX = -this.speedX/2;
+        this.speedX = parseFloat(this.speedX.toFixed(2));
     }
   }
 
