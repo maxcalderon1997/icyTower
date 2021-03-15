@@ -193,7 +193,7 @@ export class AppComponent {
       }
       let prevSpeed = AppComponent.myGamePiece.speedY;
       let didReset: boolean = false;
-      if(AppComponent.myGamePiece.speedY < 0 && AppComponent.myGamePiece.y < AppComponent.myGameArea.canvas.height / 2) {
+      if(AppComponent.myGamePiece.speedY < 0 && AppComponent.myGamePiece.y < AppComponent.myGameArea.canvas.height * 1/4) {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
           AppComponent.myObstacles[i].y -= AppComponent.myGamePiece.speedY;
           AppComponent.myObstacles[i].update();
