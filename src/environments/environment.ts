@@ -7,7 +7,11 @@ export const environment = {
   accelerationX: 0.4,
   stopSpeedLimit: 4,
   gravity: 0.98,
-  stopAccelerationX: 0.15
+  stopAccelerationX: 0.15,
+  canvasWidth: 600,
+  canvasHeight: 450,
+  obstacleSpeed: 0.5,
+  jumpSpeed: 14
 };
 
 /*

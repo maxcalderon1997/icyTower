@@ -150,8 +150,8 @@ export class AppComponent {
       keys: [],
       canvas : document.createElement("canvas"),
       start : function() {
-          this.canvas.width = 600;
-          this.canvas.height = 450;
+          this.canvas.width = environment.canvasWidth;
+          this.canvas.height = environment.canvasHeight;
           AppComponent.myGamePiece.y = this.canvas.height - AppComponent.myGamePiece.height;
           this.canvas.style.border = "1px solid black";
           this.canvas.style.marginLeft = "200px";
@@ -219,7 +219,7 @@ export class AppComponent {
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-          AppComponent.myObstacles[i].y += 0.5;
+          AppComponent.myObstacles[i].y += environment.obstacleSpeed;
           AppComponent.myObstacles[i].update();
         }
       }
@@ -227,7 +227,7 @@ export class AppComponent {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
         (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
           AppComponent.myGamePiece.didCrash())) {
-        AppComponent.accelerate(-14);
+        AppComponent.accelerate(-environment.jumpSpeed);
       }
       AppComponent.myGamePiece.newPos();
       AppComponent.myGamePiece.update();
