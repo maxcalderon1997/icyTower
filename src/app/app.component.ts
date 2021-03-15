@@ -143,7 +143,6 @@ export class AppComponent {
           this.context = this.canvas.getContext("2d");
           AppComponent.myGamePiece.update();
           document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-          this.frameNo = 0;
           window.addEventListener('keydown', function (e) {
             AppComponent.myGameArea.keys[e.keyCode] = true;
             if (!AppComponent.myGameArea.interval) {
@@ -157,7 +156,6 @@ export class AppComponent {
       clear : function() {
           this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       },
-      frameNo: 0,
       interval: undefined
   }
 
@@ -189,18 +187,6 @@ export class AppComponent {
 
   updateGameArea() {
       AppComponent.myGameArea.clear();
-      AppComponent.myGameArea.frameNo += 1;
-      // if (AppComponent.myGameArea.frameNo == 1 || this.everyinterval(150)) {
-      //     minWidth = 100;
-      //     maxWidth = 300;
-      //     width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
-      //     x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
-      //     if(AppComponent.myObstacles.length > 5){
-      //       AppComponent.myObstacles.shift();
-      //     }
-      //     AppComponent.myScore.score += 1;
-      //     AppComponent.myObstacles.push(new component(width, 10, "green", x, 0, "", AppComponent.myGameArea, AppComponent.myScore.score));
-      // }
       if (AppComponent.myObstacles[0]?.y >= AppComponent.myGameArea.canvas.height) {
         this.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
         AppComponent.myObstacles.shift();
@@ -231,11 +217,6 @@ export class AppComponent {
       if (didReset) {
         AppComponent.myGamePiece.speedY = prevSpeed + AppComponent.myGamePiece.gravity;
       }
-  }
-
-  everyinterval(n) {
-      if ((AppComponent.myGameArea.frameNo / n) % 1 == 0) {return true;}
-      return false;
   }
 
   accelerate(n) {
