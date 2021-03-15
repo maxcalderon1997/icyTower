@@ -49,27 +49,27 @@ class component {
   
   newPos() {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
-        if(this.speedX > 5){
-          this.speedX = 5;
+        if(this.speedX > 4){
+          this.speedX = 4;
         }
-        this.speedX -= 0.2; 
+        this.speedX -= 0.4; 
       } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
-        if(this.speedX < -5){
-          this.speedX = -5;
+        if(this.speedX < -4){
+          this.speedX = -4;
         }
-        this.speedX += 0.2; 
+        this.speedX += 0.4; 
       } else {
         if (this.speedX > 0) {
-          if (this.speedX < 0.2) {
+          if (this.speedX < 0.4) {
             this.speedX = 0;
           }
-          this.speedX -= 0.2;
+          this.speedX -= 0.4;
         }
         else if (this.speedX < 0) {
-          if (this.speedX > -0.2) {
+          if (this.speedX > -0.4) {
             this.speedX = 0;
           }
-          this.speedX += 0.2;
+          this.speedX += 0.4;
         }
       }
       this.speedX = parseFloat(this.speedX.toFixed(2));
@@ -143,8 +143,8 @@ export class AppComponent {
       keys: [],
       canvas : document.createElement("canvas"),
       start : function() {
-          this.canvas.width = 800;
-          this.canvas.height = 552;
+          this.canvas.width = 600;
+          this.canvas.height = 450;
           AppComponent.myGamePiece.y = this.canvas.height - AppComponent.myGamePiece.height;
           this.canvas.style.border = "1px solid black";
           this.canvas.style.marginLeft = "200px";
@@ -178,8 +178,8 @@ export class AppComponent {
     AppComponent.myGamePiece.gravity = 0.98;
     AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
     AppComponent.myGameArea.start();
-    for (let i = 0; i < 4; i++) {
-      AppComponent.createObstacle((3-i) * ((AppComponent.myGameArea.canvas.height) / 4));
+    for (let i = 0; i < 5; i++) {
+      AppComponent.createObstacle((4-i) * ((AppComponent.myGameArea.canvas.height) / 5));
     }
     AppComponent.myObstacles.forEach(obstacle => {
       obstacle.update();
@@ -220,7 +220,7 @@ export class AppComponent {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
         (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
           AppComponent.myGamePiece.didCrash())) {
-        AppComponent.accelerate(-20);
+        AppComponent.accelerate(-14);
       }
       AppComponent.myGamePiece.newPos();
       AppComponent.myGamePiece.update();
