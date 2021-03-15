@@ -97,7 +97,7 @@ class component {
     for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
       if (this.crashWith(AppComponent.myObstacles[i])) {
         this.y = AppComponent.myObstacles[i].y - this.height;
-        this.speedY = 0;
+        this.speedY = 0.5;
         this.gravity = 0;
         return true;
       } 
@@ -216,6 +216,7 @@ export class AppComponent {
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
+          AppComponent.myObstacles[i].y += 0.5;
           AppComponent.myObstacles[i].update();
         }
       }
