@@ -93,7 +93,7 @@ class component {
   hitBottom() {
       var rockbottom = this.myGameArea.canvas.height - this.height;
       if (this.y > rockbottom) {
-          if(AppComponent.wasHigh) {
+          if(AppComponent.didFirstObstableDisappear) {
             clearInterval(AppComponent.myGameArea.interval);
           }
           this.y = rockbottom;
@@ -149,7 +149,7 @@ export class AppComponent {
   static myGamePiece;
   static myObstacles = [];
   static myScore;
-  static wasHigh = false;
+  static didFirstObstableDisappear = false;
   static myGameArea = {
       keys: [],
       canvas : document.createElement("canvas"),
@@ -209,6 +209,7 @@ export class AppComponent {
   static updateGameArea() {
       AppComponent.myGameArea.clear();
       if (AppComponent.myObstacles[0]?.y >= AppComponent.myGameArea.canvas.height) {
+        AppComponent.didFirstObstableDisappear = true;
         AppComponent.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
         AppComponent.myObstacles.shift();
       }
@@ -242,6 +243,5 @@ export class AppComponent {
 
   static accelerate(n) {
     AppComponent.myGamePiece.speedY = n;
-    AppComponent.wasHigh = true;
   }
 }
