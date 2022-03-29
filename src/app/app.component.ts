@@ -93,6 +93,9 @@ class component {
   hitBottom() {
       var rockbottom = this.myGameArea.canvas.height - this.height;
       if (this.y > rockbottom) {
+          if(AppComponent.wasHigh) {
+            clearInterval(AppComponent.myGameArea.interval);
+          }
           this.y = rockbottom;
           this.speedY = 0;
       }
@@ -146,6 +149,7 @@ export class AppComponent {
   static myGamePiece;
   static myObstacles = [];
   static myScore;
+  static wasHigh = false;
   static myGameArea = {
       keys: [],
       canvas : document.createElement("canvas"),
@@ -238,5 +242,6 @@ export class AppComponent {
 
   static accelerate(n) {
     AppComponent.myGamePiece.speedY = n;
+    AppComponent.wasHigh = true;
   }
 }
