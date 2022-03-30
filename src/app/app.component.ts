@@ -12,7 +12,7 @@ import { Clock } from 'src/models/clock.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  Clock = Clock;
+  static clock: Clock;
   title = 'icyTower';
   static myGamePiece: JumpingPiece;
   static myObstacles: Obstacle[] = [];
@@ -47,7 +47,8 @@ export class AppComponent {
       audio.loop = true;
       audio.load();
       audio.play();
-      Clock.updateTime();
+      AppComponent.clock = new Clock("30px", "Consolas", "black", 40, 40, AppComponent.myGameArea);
+      AppComponent.clock.updateTime();
       AppComponent.myGameArea.interval = setInterval(AppComponent.updateGameArea, 20);
       window.removeEventListener('keydown', AppComponent.myGameArea.startObstacles);
     }
@@ -69,6 +70,7 @@ export class AppComponent {
       obstacle.update();
     })
     AppComponent.myGamePiece.update();
+    AppComponent.clock.update();
   }
 
   static createObstacle(y, obstacleScore) {
@@ -100,6 +102,7 @@ export class AppComponent {
         }
       }
       AppComponent.myScore.update();
+      AppComponent.clock.update();
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
         (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
           AppComponent.myGamePiece.didCrash())) {
