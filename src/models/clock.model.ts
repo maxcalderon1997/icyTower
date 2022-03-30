@@ -1,7 +1,9 @@
+import { environment } from "src/environments/environment";
 import { AbstractGameComponent } from "./abstract-game-component.model";
 
 export class Clock extends AbstractGameComponent{
     static time = 0;
+    static speed = 0;
     fontSize: string;
     fontStyle: string;
 
@@ -13,6 +15,10 @@ export class Clock extends AbstractGameComponent{
 
     updateTime() {
         Clock.time += 1;
+        if (Clock.time >= environment.timeToSpeedUp) {
+            Clock.speed += 1;
+            Clock.time = 0;
+        }
         setTimeout(this.updateTime.bind(this), 1000);
     }
 
@@ -20,6 +26,6 @@ export class Clock extends AbstractGameComponent{
         let ctx = this.myGameArea.context;
         ctx.font = this.fontSize + " " + this.fontStyle;
         ctx.fillStyle = this.color;
-        ctx.fillText('Time: ' + Clock.time, this.x, this.y);
+        ctx.fillText('Time left to speed up: ' + (environment.timeToSpeedUp - Clock.time), this.x, this.y);
     }
 }

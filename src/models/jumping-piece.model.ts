@@ -78,7 +78,7 @@ export class JumpingPiece extends AbstractMovingPiece {
       for (let i: number = 0; i < AppComponent.myObstacles.length; i += 1) {
         if (this.crashWith(AppComponent.myObstacles[i])) {
           this.y = AppComponent.myObstacles[i].y - this.height;
-          this.speedY = environment.obstacleSpeed * (1 + 2*Math.floor(Clock.time / environment.timeToSpeedUp));
+          this.speedY = environment.obstacleSpeed * (1 + 2*Clock.speed);
           this.gravity = 0;
           return true;
         } 

@@ -47,7 +47,7 @@ export class AppComponent {
       audio.loop = true;
       audio.load();
       audio.play();
-      AppComponent.clock = new Clock("30px", "Consolas", "black", 40, 40, AppComponent.myGameArea);
+      AppComponent.clock = new Clock("30px", "Consolas", "black", 40, 80, AppComponent.myGameArea);
       AppComponent.clock.updateTime();
       AppComponent.myGameArea.interval = setInterval(AppComponent.updateGameArea, 20);
       window.removeEventListener('keydown', AppComponent.myGameArea.startObstacles);
@@ -61,7 +61,7 @@ export class AppComponent {
   startGame() {
     AppComponent.myGamePiece = new JumpingPiece(30, 30, "red", 10, AppComponent.myGameArea.canvas.height, AppComponent.myGameArea);
     AppComponent.myGamePiece.gravity = 0.98;
-    AppComponent.myScore = new Score("30px", "Consolas", "black", 180, 40, AppComponent.myGameArea);
+    AppComponent.myScore = new Score("30px", "Consolas", "black", 40, 40, AppComponent.myGameArea);
     AppComponent.myGameArea.start();
     for (let i: number = 1; i <= environment.initialObstaclesNumber; i++) {
       AppComponent.createObstacle((environment.initialObstaclesNumber - i) * ((AppComponent.myGameArea.canvas.height) / environment.initialObstaclesNumber), i);
@@ -97,7 +97,7 @@ export class AppComponent {
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-          AppComponent.myObstacles[i].y += environment.obstacleSpeed * (1 + 2*Math.floor(Clock.time / environment.timeToSpeedUp));
+          AppComponent.myObstacles[i].y += environment.obstacleSpeed * (1 + 2*Clock.speed);
           AppComponent.myObstacles[i].update();
         }
       }
