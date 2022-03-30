@@ -14,7 +14,8 @@ export const environment = {
   jumpSpeed: 14,
   bigJumpSpeed: 28,
   speedXforBigJump: 10,
-  initialObstaclesNumber: 5
+  initialObstaclesNumber: 5,
+  timeToSpeedUp: 30
 };
 
 /*

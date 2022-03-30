@@ -2,6 +2,7 @@ import { AbstractMovingPiece } from '../models/abstract-moving-piece.model';
 import { AppComponent } from '../app/app.component';
 import { environment } from '../environments/environment';
 import { Obstacle } from './obstacle.model';
+import {Clock} from './clock.model'
 
 export class JumpingPiece extends AbstractMovingPiece {
     gravity: number = 0;
@@ -77,7 +78,7 @@ export class JumpingPiece extends AbstractMovingPiece {
       for (let i: number = 0; i < AppComponent.myObstacles.length; i += 1) {
         if (this.crashWith(AppComponent.myObstacles[i])) {
           this.y = AppComponent.myObstacles[i].y - this.height;
-          this.speedY = 0.5;
+          this.speedY = environment.obstacleSpeed * (1 + 2*Clock.speed);
           this.gravity = 0;
           return true;
         } 
@@ -95,7 +96,7 @@ export class JumpingPiece extends AbstractMovingPiece {
         var crash = false;
         if (this.speedY >= 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
             crash = true;
-            AppComponent.myScore.text="SCORE: " + otherobj.score;
+            AppComponent.myScore.score= otherobj.score;
         }
         return crash;
     }
