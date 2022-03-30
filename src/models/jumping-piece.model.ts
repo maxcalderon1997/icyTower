@@ -1,9 +1,10 @@
 import { AbstractMovingPiece } from '../models/abstract-moving-piece.model';
 import { AppComponent } from '../app/app.component';
 import { environment } from '../environments/environment';
+import { Obstacle } from './obstacle.model';
 
 export class JumpingPiece extends AbstractMovingPiece {
-    gravity = 0;
+    gravity: number = 0;
   
     constructor(width, height, color, x, y, myGameArea){
         super(width, height, color, x, y, myGameArea);
@@ -52,7 +53,7 @@ export class JumpingPiece extends AbstractMovingPiece {
     }
     
     hitBottom() {
-        var rockbottom = this.myGameArea.canvas.height - this.height;
+        var rockbottom: number = this.myGameArea.canvas.height - this.height;
         if (this.y > rockbottom) {
             if(AppComponent.myScore.score > environment.initialObstaclesNumber) {
               AppComponent.myScore.text = "Game Over!";
@@ -73,7 +74,7 @@ export class JumpingPiece extends AbstractMovingPiece {
     }
   
     didCrash() {
-      for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
+      for (let i: number = 0; i < AppComponent.myObstacles.length; i += 1) {
         if (this.crashWith(AppComponent.myObstacles[i])) {
           this.y = AppComponent.myObstacles[i].y - this.height;
           this.speedY = 0.5;
@@ -84,7 +85,7 @@ export class JumpingPiece extends AbstractMovingPiece {
       return false;
     }
     
-    crashWith(otherobj) {
+    crashWith(otherobj: Obstacle) {
         var myleft = this.x;
         var myright = this.x + (this.width);
         var mybottom = this.y + (this.height);

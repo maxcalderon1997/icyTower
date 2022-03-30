@@ -11,8 +11,8 @@ import { Obstacle } from 'src/models/obstacle.model'
 })
 export class AppComponent {
   title = 'icyTower';
-  static myGamePiece;
-  static myObstacles = [];
+  static myGamePiece: JumpingPiece;
+  static myObstacles: Obstacle[] = [];
   static myScore: Score;
   static myGameArea = {
     keys: [],
@@ -53,19 +53,19 @@ export class AppComponent {
     AppComponent.myGamePiece.gravity = 0.98;
     AppComponent.myScore = new Score("30px", "Consolas", "black", 280, 40, AppComponent.myGameArea);
     AppComponent.myGameArea.start();
-    for (let i = 0; i < environment.initialObstaclesNumber; i++) {
+    for (let i: number = 0; i < environment.initialObstaclesNumber; i++) {
       AppComponent.createObstacle((environment.initialObstaclesNumber - 1 - i) * ((AppComponent.myGameArea.canvas.height) / environment.initialObstaclesNumber));
     }
-    AppComponent.myObstacles.forEach(obstacle => {
+    AppComponent.myObstacles.forEach((obstacle: Obstacle) => {
       obstacle.update();
     })
     AppComponent.myGamePiece.update();
   }
 
   static createObstacle(y) {
-    let minWidth = 100, maxWidth = 300;
-    let width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
-    let x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
+    let minWidth: number = 100, maxWidth: number = 300;
+    let width: number = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
+    let x: number = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
     AppComponent.myScore.score += 1;
     AppComponent.myObstacles.push(new Obstacle(width, 10, "green", x, y, AppComponent.myGameArea, AppComponent.myScore.score));
   }
@@ -76,7 +76,7 @@ export class AppComponent {
         AppComponent.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
         AppComponent.myObstacles.shift();
       }
-      let prevSpeed = AppComponent.myGamePiece.speedY;
+      let prevSpeed: number = AppComponent.myGamePiece.speedY;
       let didReset: boolean = false;
       if(AppComponent.myGamePiece.speedY < 0 && AppComponent.myGamePiece.y < AppComponent.myGameArea.canvas.height * 1/4) {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {

@@ -1,7 +1,8 @@
 import { AbstractGameComponent } from '../models/abstract-game-component.model';
 import { AppComponent } from '../app/app.component';
-export class Score extends AbstractGameComponent {
-    score = 0;
+import { IHasScore } from '../app/interfaces/has-score.interface'
+export class Score extends AbstractGameComponent implements IHasScore {
+    score:number = 0;
     text = "";
     fontSize: string;
     fontStyle: string;

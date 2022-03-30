@@ -1,8 +1,8 @@
 import { AbstractGameComponent } from '../models/abstract-game-component.model';
 
 export class AbstractMovingPiece extends AbstractGameComponent {
-    speedX = 0;
-    speedY = 0;
+    speedX: number = 0;
+    speedY: number = 0;
     width: number;
     height: number
   
