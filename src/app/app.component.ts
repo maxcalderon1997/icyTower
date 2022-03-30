@@ -46,6 +46,11 @@ export class AppComponent {
 
   constructor() {
     this.startGame();
+    let audio = new Audio();
+    audio.src = "../../../assets/sounds/IcyTowerTheme.mp3";
+    audio.loop = true;
+    audio.load();
+    audio.play();
   }
 
   startGame() {
@@ -96,6 +101,10 @@ export class AppComponent {
         (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
           AppComponent.myGamePiece.didCrash())) {
         if (AppComponent.myGamePiece.speedX >= environment.speedXforBigJump || AppComponent.myGamePiece.speedX <= -environment.speedXforBigJump) {
+          let audio = new Audio();
+          audio.src = "../../../assets/sounds/harold_high_jump.ogg";
+          audio.load();
+          audio.play();
           AppComponent.accelerate(-environment.bigJumpSpeed);
         } else {
           AppComponent.accelerate(-environment.jumpSpeed);
