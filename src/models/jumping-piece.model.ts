@@ -54,7 +54,7 @@ export class JumpingPiece extends AbstractMovingPiece {
     hitBottom() {
         var rockbottom = this.myGameArea.canvas.height - this.height;
         if (this.y > rockbottom) {
-            if(AppComponent.didFirstObstableDisappear) {
+            if(AppComponent.myScore.score > environment.initialObstaclesNumber) {
               clearInterval(AppComponent.myGameArea.interval);
             }
             this.y = rockbottom;
