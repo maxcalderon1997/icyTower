@@ -95,7 +95,11 @@ export class AppComponent {
       if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[32] &&
         (AppComponent.myGamePiece.y == AppComponent.myGameArea.canvas.height - AppComponent.myGamePiece.height ||
           AppComponent.myGamePiece.didCrash())) {
-        AppComponent.accelerate(-environment.jumpSpeed);
+        if (AppComponent.myGamePiece.speedX >= environment.speedXforBigJump || AppComponent.myGamePiece.speedX <= -environment.speedXforBigJump) {
+          AppComponent.accelerate(-environment.bigJumpSpeed);
+        } else {
+          AppComponent.accelerate(-environment.jumpSpeed);
+        }
       }
       AppComponent.myGamePiece.newPos();
       AppComponent.myGamePiece.update();
