@@ -1,7 +1,7 @@
-import { environment } from '../../src/environments/environment';
-import { AppComponent } from '../../src/app/app.component'
+import { environment } from '../environments/environment';
+import { AppComponent } from '../app/app.component'
 
-export class component {
+export class AbstractGameComponent {
 
     type;
     score = 0;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { component } from 'src/models/jumpingPiece.model'
+import { AbstractGameComponent } from 'src/models/abstract-game-component.model'
 
 @Component({
   selector: 'app-root',
@@ -48,9 +48,9 @@ export class AppComponent {
   }
 
   startGame() {
-    AppComponent.myGamePiece = new component(30, 30, "red", 10, AppComponent.myGameArea.canvas.height, "", AppComponent.myGameArea);
+    AppComponent.myGamePiece = new AbstractGameComponent(30, 30, "red", 10, AppComponent.myGameArea.canvas.height, "", AppComponent.myGameArea);
     AppComponent.myGamePiece.gravity = 0.98;
-    AppComponent.myScore = new component("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
+    AppComponent.myScore = new AbstractGameComponent("30px", "Consolas", "black", 280, 40, "text", AppComponent.myGameArea);
     AppComponent.myGameArea.start();
     for (let i = 0; i < 5; i++) {
       AppComponent.createObstacle((4-i) * ((AppComponent.myGameArea.canvas.height) / 5));
@@ -66,7 +66,7 @@ export class AppComponent {
     let width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
     let x = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
     AppComponent.myScore.score += 1;
-    AppComponent.myObstacles.push(new component(width, 10, "green", x, y, "", AppComponent.myGameArea, AppComponent.myScore.score));
+    AppComponent.myObstacles.push(new AbstractGameComponent(width, 10, "green", x, y, "", AppComponent.myGameArea, AppComponent.myScore.score));
   }
 
   static updateGameArea() {
