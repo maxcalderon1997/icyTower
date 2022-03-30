@@ -3,6 +3,8 @@ import { environment } from 'src/environments/environment';
 import { JumpingPiece } from 'src/models/jumping-piece.model'
 import { Score } from 'src/models/score.model'
 import { Obstacle } from 'src/models/obstacle.model'
+import { timer } from 'rxjs';
+import { Clock } from 'src/models/clock.model';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +12,7 @@ import { Obstacle } from 'src/models/obstacle.model'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  Clock = Clock;
   title = 'icyTower';
   static myGamePiece: JumpingPiece;
   static myObstacles: Obstacle[] = [];
@@ -39,6 +42,12 @@ export class AppComponent {
     },
     interval: undefined,
     startObstacles : function() {
+      let audio = new Audio();
+      audio.src = "../../../assets/sounds/IcyTowerTheme.mp3";
+      audio.loop = true;
+      audio.load();
+      audio.play();
+      Clock.updateTime();
       AppComponent.myGameArea.interval = setInterval(AppComponent.updateGameArea, 20);
       window.removeEventListener('keydown', AppComponent.myGameArea.startObstacles);
     }
@@ -46,20 +55,15 @@ export class AppComponent {
 
   constructor() {
     this.startGame();
-    let audio = new Audio();
-    audio.src = "../../../assets/sounds/IcyTowerTheme.mp3";
-    audio.loop = true;
-    audio.load();
-    audio.play();
   }
 
   startGame() {
     AppComponent.myGamePiece = new JumpingPiece(30, 30, "red", 10, AppComponent.myGameArea.canvas.height, AppComponent.myGameArea);
     AppComponent.myGamePiece.gravity = 0.98;
-    AppComponent.myScore = new Score("30px", "Consolas", "black", 280, 40, AppComponent.myGameArea);
+    AppComponent.myScore = new Score("30px", "Consolas", "black", 180, 40, AppComponent.myGameArea);
     AppComponent.myGameArea.start();
-    for (let i: number = 0; i < environment.initialObstaclesNumber; i++) {
-      AppComponent.createObstacle((environment.initialObstaclesNumber - 1 - i) * ((AppComponent.myGameArea.canvas.height) / environment.initialObstaclesNumber));
+    for (let i: number = 1; i <= environment.initialObstaclesNumber; i++) {
+      AppComponent.createObstacle((environment.initialObstaclesNumber - i) * ((AppComponent.myGameArea.canvas.height) / environment.initialObstaclesNumber), i);
     }
     AppComponent.myObstacles.forEach((obstacle: Obstacle) => {
       obstacle.update();
@@ -67,18 +71,17 @@ export class AppComponent {
     AppComponent.myGamePiece.update();
   }
 
-  static createObstacle(y) {
+  static createObstacle(y, obstacleScore) {
     let minWidth: number = 100, maxWidth: number = 300;
     let width: number = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
     let x: number = Math.floor(Math.random()*(AppComponent.myGameArea.canvas.width - width));
-    AppComponent.myScore.score += 1;
-    AppComponent.myObstacles.push(new Obstacle(width, 10, "green", x, y, AppComponent.myGameArea, AppComponent.myScore.score));
+    AppComponent.myObstacles.push(new Obstacle(width, 10, "green", x, y, AppComponent.myGameArea, obstacleScore));
   }
 
   static updateGameArea() {
       AppComponent.myGameArea.clear();
       if (AppComponent.myObstacles[0]?.y >= AppComponent.myGameArea.canvas.height) {
-        AppComponent.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
+        AppComponent.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height, AppComponent.myObstacles[AppComponent.myObstacles.length - 1].score + 1);
         AppComponent.myObstacles.shift();
       }
       let prevSpeed: number = AppComponent.myGamePiece.speedY;
@@ -92,7 +95,8 @@ export class AppComponent {
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-          AppComponent.myObstacles[i].y += environment.obstacleSpeed;
+          console.log('clocl ' + Clock.time);
+          AppComponent.myObstacles[i].y += environment.obstacleSpeed * (1 + 2*Math.floor(Clock.time / 60));
           AppComponent.myObstacles[i].update();
         }
       }
@@ -118,6 +122,6 @@ export class AppComponent {
   }
 
   static accelerate(n) {
-    AppComponent.myGamePiece.speedY = n;
+    AppComponent.myGamePiece.speedY += n;
   }
 }

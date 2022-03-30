@@ -3,7 +3,7 @@ import { AppComponent } from '../app/app.component';
 import { IHasScore } from '../app/interfaces/has-score.interface'
 export class Score extends AbstractGameComponent implements IHasScore {
     score:number = 0;
-    text = "";
+    text = "SCORE: ";
     fontSize: string;
     fontStyle: string;
   
@@ -17,7 +17,7 @@ export class Score extends AbstractGameComponent implements IHasScore {
         let ctx = this.myGameArea.context;
         ctx.font = this.fontSize + " " + this.fontStyle;
         ctx.fillStyle = this.color;
-        ctx.fillText(this.text, this.x, this.y);
+        ctx.fillText(this.text + this.score, this.x, this.y);
         if (this.text.startsWith("Game Over!")) {
             clearInterval(AppComponent.myGameArea.interval);
         }
