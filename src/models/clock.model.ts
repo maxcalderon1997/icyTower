@@ -18,6 +18,10 @@ export class Clock extends AbstractGameComponent{
         if (Clock.time >= environment.timeToSpeedUp) {
             Clock.speed += 1;
             Clock.time = 0;
+            let audio = new Audio();
+            audio.src = "../../../assets/sounds/ring.ogg";
+            audio.load();
+            audio.play();
         }
         setTimeout(this.updateTime.bind(this), 1000);
     }
