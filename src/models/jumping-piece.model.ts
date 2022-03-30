@@ -56,7 +56,7 @@ export class JumpingPiece extends AbstractMovingPiece {
         var rockbottom: number = this.myGameArea.canvas.height - this.height;
         if (this.y > rockbottom) {
             if(AppComponent.myScore.score > environment.initialObstaclesNumber) {
-              AppComponent.myScore.text = "Game Over!";
+              AppComponent.myScore.text = "Game Over! " + AppComponent.myScore.text;
             }
             this.y = rockbottom;
             this.speedY = 0;
