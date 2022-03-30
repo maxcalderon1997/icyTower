@@ -13,7 +13,7 @@ export class AppComponent {
   title = 'icyTower';
   static myGamePiece;
   static myObstacles = [];
-  static myScore;
+  static myScore: Score;
   static myGameArea = {
     keys: [],
     canvas : document.createElement("canvas"),
