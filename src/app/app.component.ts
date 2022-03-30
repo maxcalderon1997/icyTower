@@ -95,8 +95,7 @@ export class AppComponent {
         didReset = true;
       } else {
         for (let i = 0; i < AppComponent.myObstacles.length; i += 1) {
-          console.log('clocl ' + Clock.time);
-          AppComponent.myObstacles[i].y += environment.obstacleSpeed * (1 + 2*Math.floor(Clock.time / 60));
+          AppComponent.myObstacles[i].y += environment.obstacleSpeed * (1 + 2*Math.floor(Clock.time / environment.timeToSpeedUp));
           AppComponent.myObstacles[i].update();
         }
       }
