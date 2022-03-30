@@ -18,7 +18,7 @@ export class Score extends AbstractGameComponent implements IHasScore {
         ctx.font = this.fontSize + " " + this.fontStyle;
         ctx.fillStyle = this.color;
         ctx.fillText(this.text, this.x, this.y);
-        if (this.text === "Game Over!") {
+        if (this.text.startsWith("Game Over!")) {
             clearInterval(AppComponent.myGameArea.interval);
         }
     }
