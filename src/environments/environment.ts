@@ -12,6 +12,8 @@ export const environment = {
   canvasHeight: 450,
   obstacleSpeed: 0.5,
   jumpSpeed: 14,
+  bigJumpSpeed: 28,
+  speedXforBigJump: 10,
   initialObstaclesNumber: 5
 };
 
