@@ -1,51 +1,12 @@
-import { environment } from '../../src/environments/environment';
-import { AppComponent } from '../../src/app/app.component'
+import { AbstractMovingPiece } from '../models/abstract-moving-piece.model';
+import { AppComponent } from '../app/app.component';
+import { environment } from '../environments/environment';
 
-export class component {
-
-    type;
-    score = 0;
-    width;
-    height;
-    speedX = 0;
-    _speedY = 0;    
-    x;
-    y;
+export class JumpingPiece extends AbstractMovingPiece {
     gravity = 0;
-    color;
-    myGameArea;
-    text = "";
   
-    constructor(width, height, color, x, y, type, myGameArea, score?){
-      this.type = type;
-      this.width = width;
-      this.height = height;
-      this.x = x;
-      this.y = y;
-      this.color = color;
-      this.myGameArea = myGameArea;
-      if (score) {
-        this.score = score;
-      }
-    }
-  
-    set speedY(value: any) {
-      this._speedY = value;
-    }
-    get speedY(): any {
-      return this._speedY;
-    }
-    
-    update() {
-        let ctx = this.myGameArea.context;
-        if (this.type == "text") {
-            ctx.font = this.width + " " + this.height;
-            ctx.fillStyle = this.color;
-            ctx.fillText(this.text, this.x, this.y);
-        } else {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
+    constructor(width, height, color, x, y, myGameArea){
+        super(width, height, color, x, y, myGameArea);
     }
     
     newPos() {
