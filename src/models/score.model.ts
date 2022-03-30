@@ -1,5 +1,5 @@
 import { AbstractGameComponent } from '../models/abstract-game-component.model';
-
+import { AppComponent } from '../app/app.component';
 export class Score extends AbstractGameComponent {
     score = 0;
     text = "";
@@ -17,5 +17,8 @@ export class Score extends AbstractGameComponent {
         ctx.font = this.fontSize + " " + this.fontStyle;
         ctx.fillStyle = this.color;
         ctx.fillText(this.text, this.x, this.y);
+        if (this.text === "Game Over!") {
+            clearInterval(AppComponent.myGameArea.interval);
+        }
     }
 }

@@ -13,8 +13,7 @@ export class AppComponent {
   title = 'icyTower';
   static myGamePiece;
   static myObstacles = [];
-  static myScore;
-  static didFirstObstableDisappear = false;
+  static myScore: Score;
   static myGameArea = {
     keys: [],
     canvas : document.createElement("canvas"),
@@ -54,8 +53,8 @@ export class AppComponent {
     AppComponent.myGamePiece.gravity = 0.98;
     AppComponent.myScore = new Score("30px", "Consolas", "black", 280, 40, AppComponent.myGameArea);
     AppComponent.myGameArea.start();
-    for (let i = 0; i < 5; i++) {
-      AppComponent.createObstacle((4-i) * ((AppComponent.myGameArea.canvas.height) / 5));
+    for (let i = 0; i < environment.initialObstaclesNumber; i++) {
+      AppComponent.createObstacle((environment.initialObstaclesNumber - 1 - i) * ((AppComponent.myGameArea.canvas.height) / environment.initialObstaclesNumber));
     }
     AppComponent.myObstacles.forEach(obstacle => {
       obstacle.update();
@@ -74,7 +73,6 @@ export class AppComponent {
   static updateGameArea() {
       AppComponent.myGameArea.clear();
       if (AppComponent.myObstacles[0]?.y >= AppComponent.myGameArea.canvas.height) {
-        AppComponent.didFirstObstableDisappear = true;
         AppComponent.createObstacle(AppComponent.myObstacles[0]?.y - AppComponent.myGameArea.canvas.height);
         AppComponent.myObstacles.shift();
       }

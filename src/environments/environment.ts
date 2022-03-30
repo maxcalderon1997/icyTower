@@ -11,7 +11,8 @@ export const environment = {
   canvasWidth: 600,
   canvasHeight: 450,
   obstacleSpeed: 0.5,
-  jumpSpeed: 14
+  jumpSpeed: 14,
+  initialObstaclesNumber: 5
 };
 
 /*
