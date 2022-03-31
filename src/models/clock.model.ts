@@ -6,6 +6,7 @@ export class Clock extends AbstractGameComponent{
     static speed = 0;
     fontSize: string;
     fontStyle: string;
+    canvas;
 
     constructor(fontSize, fontStyle, color, x, y, myGameArea){
         super(color, x, y, myGameArea);
@@ -27,9 +28,10 @@ export class Clock extends AbstractGameComponent{
     }
 
     update() {
-        let ctx = this.myGameArea.context;
-        ctx.font = this.fontSize + " " + this.fontStyle;
-        ctx.fillStyle = this.color;
-        ctx.fillText('Time left to speed up: ' + (environment.timeToSpeedUp - Clock.time), this.x, this.y);
+        // let ctx = this.canvas.getContext("2d");
+        // ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        // ctx.font = this.fontSize + " " + this.fontStyle;
+        // ctx.fillStyle = this.color;
+        // ctx.fillText('Time left to speed up: ' + (environment.timeToSpeedUp - Clock.time), this.x, this.y);
     }
 }

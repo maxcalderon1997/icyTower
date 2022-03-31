@@ -1,5 +1,5 @@
 import { AbstractMovingPiece } from '../models/abstract-moving-piece.model';
-import { AppComponent } from '../app/app.component';
+import { GameComponent } from '../app/game/game.component';
 import { environment } from '../environments/environment';
 import { Obstacle } from './obstacle.model';
 import {Clock} from './clock.model'
@@ -12,12 +12,12 @@ export class JumpingPiece extends AbstractMovingPiece {
     }
     
     newPos() {
-        if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[37]) {
+        if (GameComponent.myGameArea.keys && GameComponent.myGameArea.keys[37]) {
           if(this.speedX > environment.stopSpeedLimit){
             this.speedX = environment.stopSpeedLimit;
           }
           this.speedX -= environment.accelerationX; 
-        } else if (AppComponent.myGameArea.keys && AppComponent.myGameArea.keys[39]) {
+        } else if (GameComponent.myGameArea.keys && GameComponent.myGameArea.keys[39]) {
           if(this.speedX < -environment.stopSpeedLimit){
             this.speedX = -environment.stopSpeedLimit;
           }
@@ -56,8 +56,8 @@ export class JumpingPiece extends AbstractMovingPiece {
     hitBottom() {
         var rockbottom: number = this.myGameArea.canvas.height - this.height;
         if (this.y > rockbottom) {
-            if(AppComponent.myScore.score > environment.initialObstaclesNumber) {
-              AppComponent.myScore.text = "Game Over! " + AppComponent.myScore.text;
+            if(GameComponent.myScore.score > environment.initialObstaclesNumber) {
+              GameComponent.myScore.text = "Game Over! " + GameComponent.myScore.text;
             }
             this.y = rockbottom;
             this.speedY = 0;
@@ -75,9 +75,9 @@ export class JumpingPiece extends AbstractMovingPiece {
     }
   
     didCrash() {
-      for (let i: number = 0; i < AppComponent.myObstacles.length; i += 1) {
-        if (this.crashWith(AppComponent.myObstacles[i])) {
-          this.y = AppComponent.myObstacles[i].y - this.height;
+      for (let i: number = 0; i < GameComponent.myObstacles.length; i += 1) {
+        if (this.crashWith(GameComponent.myObstacles[i])) {
+          this.y = GameComponent.myObstacles[i].y - this.height;
           this.speedY = environment.obstacleSpeed * (1 + 2*Clock.speed);
           this.gravity = 0;
           return true;
@@ -96,7 +96,7 @@ export class JumpingPiece extends AbstractMovingPiece {
         var crash = false;
         if (this.speedY >= 0 && (mybottom <= othertop) && (mybottom >= othertop - this.speedY) && (myright >= otherleft) && (myleft <= otherright)) {
             crash = true;
-            AppComponent.myScore.score= otherobj.score;
+            GameComponent.myScore.score= otherobj.score;
         }
         return crash;
     }
